@@ -1,36 +1,21 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Why does this exist?
 
-First, run the development server:
+Main stream media love a in the gutter culture war and they're really pushing hard on "drivers" vs "cyclists".
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+I am a pedestrian, driver, and a person on a bicycle.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+I am so very tired about being harassed and abused for being a person on a bicycle.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+There are a large number of people who believe that people on bicycles do not have the right to be on a road. In my experience this is common to the UK, USA and Australia.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+One simple, and so absolutely incorrect, misbelief is that car registration pays for roads. All of them. All of the BILLIONS of dollars spent on maintenance and new roads is paid for by car rego. It's not.
 
-## Learn More
+The argument is that people on bicycles (how does that work for 5yo kids on balance bikes?) should pay rego and then they'll get fair treatment.
 
-To learn more about Next.js, take a look at the following resources:
+Fine. So lets work out what rego should be.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Fair is paying for your use, be it size, weight, speed, power.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+So whack some values in the calculator and see what bicycle rego, and other vehicles should cost.
