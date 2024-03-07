@@ -1,113 +1,168 @@
-import Image from "next/image";
+'use client'
+import { useState } from 'react';
+import * as React from 'react';
+import { Button, Tooltip } from '@mui/material';
+import DisplayForm from './form';
+import Paper from '@mui/material/Paper';
+import * as v from './vehicles';
+import Table from '@mui/material/Table';
+import TableContainer from '@mui/material/TableContainer';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+
+const toCurrency = (x: number): string => {
+  return x.toLocaleString('en-AU', {
+    style: 'currency',
+    currency: 'AUD',
+    minimumFractionDigits: 2
+  }
+  )
+}
+
+const toWatts = (x: number): string => {
+  return `${x.toLocaleString()}`;
+}
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+  const [fields, setFields] = useState({
+    fieldKG: 0,
+    fieldPower: 0,
+    fieldLength: 0,
+    fieldWidth: 0,
+    fieldMaxSpeed: 0,
+    fieldCO2: 0
+  });
+
+  const UpdateField = (fieldName: string, value: number) => {
+    setFields(prevState => ({
+      ...prevState,
+      [fieldName]: value
+    }));
+  };
+
+  const HandleFieldChange = (id: string, v: number) => {
+    UpdateField(id, v)
+  }
+
+  const CalculateRego = (i: number): number => {
+    return fields.fieldKG > 0 ?
+      (fields.fieldKG * v.Vehicles[i].details.weight)
+      + (fields.fieldPower * v.Vehicles[i].details.power)
+      + (fields.fieldLength * v.Vehicles[i].details.length)
+      + (fields.fieldWidth * v.Vehicles[i].details.width)
+      + (fields.fieldMaxSpeed * v.Vehicles[i].details.maxSpeed)
+      + (fields.fieldCO2 * v.Vehicles[i].details.co2)
+      : v.Vehicles[i].details.tacIncluded
+        ? v.Vehicles[i].details.originalRegoCost - v.Vehicles[i].details.tacCost
+        : v.Vehicles[i].details.originalRegoCost
+
+  }
+
+  const Reset = () => {
+    setFields({
+      fieldKG: 0,
+      fieldPower: 0,
+      fieldLength: 0,
+      fieldWidth: 0,
+      fieldMaxSpeed: 0,
+      fieldCO2: 0
+    })
+  }
+
+  const DisplayVehicles = (vehicles: v.VehiclesInterface[]) => {
+    return (vehicles.map((v: v.VehiclesInterface, i: number) => {
+      return (
+        <Accordion sx={{ maxWidth: 500 }}>
+          <AccordionSummary
+            expandIcon={<ExpandCircleDownIcon />}
+            aria-controls="panel1-content"
+            id={v.name}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+            <Typography><Tooltip title={v.details.reference}><Link target="_blank" rel="noopener" href={v.details.reference}>{v.name}</Link></Tooltip> - {toCurrency(CalculateRego(i))}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <TableContainer component={Paper}>
+              <Table size="small" aria-label="simple table">
+                <TableBody>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Original Rego:</TableCell>
+                    <TableCell align="right">{toCurrency(v.details.originalRegoCost)}</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">TAC Charge</TableCell>
+                    <TableCell align="right">{toCurrency(v.details.tacCost)}</TableCell>
+                  </TableRow>
+                  {v.details.tacIncluded &&
+                    <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">TAC included</TableCell>
+                      <TableCell align="right">Yes</TableCell>
+                    </TableRow>
+                  }
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Rego Only</TableCell>
+                    <TableCell align="right">{toCurrency(v.details.tacIncluded ? v.details.originalRegoCost - v.details.tacCost : v.details.originalRegoCost)}</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Calculated Rego</TableCell>
+                    <TableCell align="right">{toCurrency(CalculateRego(i))}</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Weight</TableCell>
+                    <TableCell align="right">{v.details.weight}kg</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Engine Watts</TableCell>
+                    <TableCell align="right">{toWatts(v.details.power)}w</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Length</TableCell>
+                    <TableCell align="right">{v.details.length}cm</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Width</TableCell>
+                    <TableCell align="right">{v.details.width}cm</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">Max Speed</TableCell>
+                    <TableCell align="right">{v.details.maxSpeed}</TableCell>
+                  </TableRow>
+                  <TableRow key={v.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">gram/km CO2</TableCell>
+                    <TableCell align="right">{v.details.co2}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </AccordionDetails>
+        </Accordion >
+      )
+    }))
+  }
+
+  return (
+    <div>
+      <DisplayForm
+        ResetFunc={Reset}
+        CalculateRegoFunc={CalculateRego}
+        FieldChange={HandleFieldChange}
+        fields={fields}
+      />
+      <Button
+        variant="contained"
+        sx={{ ml: 1 }}
+        onClick={() => { Reset() }}
+      >RESET</Button>
+      <div style={{ padding: 5 }}>
+        {DisplayVehicles(v.Vehicles)}
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }
