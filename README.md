@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Why does this exist?
 
-Main stream media love a in the gutter culture war and they're really pushing hard on "drivers" vs "cyclists".
+Main stream media love an in the gutter culture war and they're really pushing hard on "drivers" vs "cyclists".
 
 I am a pedestrian, driver, and a person on a bicycle.
 
