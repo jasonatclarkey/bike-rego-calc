@@ -80,7 +80,7 @@ export default function Home() {
   const DisplayVehicles = (vehicles: v.VehiclesInterface[]) => {
     return (vehicles.map((v: v.VehiclesInterface, i: number) => {
       return (
-        <Accordion sx={{ maxWidth: 500 }}>
+        <Accordion sx={{ maxWidth: 500 }} key={i} id={v.name}>
           <AccordionSummary
             expandIcon={<ExpandCircleDownIcon />}
             aria-controls="panel1-content"

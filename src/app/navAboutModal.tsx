@@ -50,9 +50,9 @@ export default function AboutModal() {
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, m: 1 }}>
-                            You've probably been linked to this calculator as part of a discussion around the
-                            idea that people on bicycles do not "pay to use the road", and perhaps that
-                            paying some form of "rego", or "road tax" is required.
+                            You&apos;ve probably been linked to this calculator as part of a discussion around the
+                            idea that people on bicycles do not &quot;pay to use the road&quot;, and perhaps that
+                            paying some form of &quot;rego&quot;, or &quot;road tax&quot; is required.
                         </Typography>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, m: 1 }}>
                             This payment would make it fair, apparently, and all road users would get along, apparently.

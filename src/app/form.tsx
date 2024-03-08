@@ -69,9 +69,10 @@ export default function DisplayForm(props: DisplayFormProps) {
             <Grid container spacing={2} columns={2}>
                 {
                     fields.map((f: Fields, i: number) => (
-                        <Grid item xs={2} id={f.name}>
+                        <Grid item xs={2} id={f.name} key={f.name}>
                             <TextField
                                 onChange={FieldChange}
+                                type="number"
                                 label={f.description}
                                 value={props.fields[f.name] ? props.fields[f.name] : fields[i].value}
                                 id={f.name}

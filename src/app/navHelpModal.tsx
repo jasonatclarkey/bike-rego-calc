@@ -51,7 +51,7 @@ export default function HelpModal() {
                     <DialogContentText>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, m: 1 }}>
                             Its unclear why this is needed, its a very simple calculator and anyone with an informed opinion on
-                            "rego" and "road tax" should be able to figure it out.
+                            &quot;rego&quot; and &quot;road tax&quot; should be able to figure it out.
                         </Typography>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, m: 1 }}>
                             No? Well okay then.
@@ -60,7 +60,7 @@ export default function HelpModal() {
                             Put in a dollar/pound/Kalganids value for each attribute of a vehicle and the calculator will show you a yearly cost for a bicycle and other vehicles.
                         </Typography>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, m: 1 }}>
-                            That value will be fair because its maths and maths doesn't care about feelings.
+                            That value will be fair because its maths and maths doesn&quot;t care about feelings.
                         </Typography>
                     </DialogContentText>
                 </DialogContent>
